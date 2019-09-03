@@ -1,0 +1,28 @@
+﻿<Window x:Class="MusgramClient.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MusgramClient.Views"
+        mc:Ignorable="d"
+        Title="MainWindow" MinHeight="600" MinWidth="900"
+        DataContext="{Binding Main, Source={StaticResource Locator}}">
+    <Window.Resources>
+        <DataTemplate x:Key="Authentication">
+            <local:Authentication/>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <ContentControl Content="{Binding}">
+            <ContentControl.Style>
+                <Style TargetType="ContentControl">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Cur_Page}" Value="Authentication">
+                            <Setter Property="ContentTemplate" Value="{StaticResource Authentication}"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
+    </Grid>
+</Window>

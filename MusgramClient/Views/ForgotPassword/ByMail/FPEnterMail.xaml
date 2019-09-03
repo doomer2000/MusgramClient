@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="MusgramClient.Views.ForgotPassword.ByMail.FPEnterMail"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MusgramClient.Views.ForgotPassword.ByMail"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             DataContext="{Binding Authentication, Source={StaticResource Locator}}">
+    <UserControl.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="25"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock HorizontalAlignment="Center" Text="Забыли пароль?"
+                       FontSize="30" FontWeight="Black"/>
+            <TextBlock Margin="0 0 0 10" TextAlignment="Center"
+                       FontSize="17">
+                Не волнуйтесь, просто<LineBreak/> введите свой адрес электронной почты,<LineBreak/> и мы вышлем код для его изменения.
+            </TextBlock>
+            <TextBox TextAlignment="Center" Margin="0 0 0 10"  FontSize="25" Width="400"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Command="{Binding LogInPageOpen}" Content="Назад" FontSize="20" Margin="0 0 20 0" Height="40"/>
+                <Button Command="{Binding FPECOpen}" Content="Далее" FontWeight="DemiBold" FontSize="20" Height="40"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

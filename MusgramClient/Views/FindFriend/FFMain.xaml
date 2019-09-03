@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="MusgramClient.Views.FindFriend.FFMain"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:matdes="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:MusgramClient.Views.FindFriend"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Button HorizontalAlignment="Left" VerticalAlignment="Top"
+                Height="60" Width="80"
+                Margin="25 25 0 0">
+            <matdes:PackIcon Kind="Backspace">
+                <matdes:PackIcon.LayoutTransform>
+                    <ScaleTransform CenterX="0.0" CenterY="0.0" ScaleX="2.5" ScaleY="2"/>
+                </matdes:PackIcon.LayoutTransform>
+            </matdes:PackIcon>
+        </Button>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="Найти друга" FontSize="35" TextAlignment="Center"
+                       Margin="0 10 0 10" Foreground="Purple"/>
+            <Button Content="По близости" Height="50" FontSize="25" 
+                    Margin="0 5 0 5"/>
+            <Button Height="50" FontSize="25" Content="По музыкальным предпочтениям"
+                    Margin="0 5 0 5"/>
+            <Button Height="50" FontSize="25" Content="Случайно"
+                    Margin="0 5 0 5"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
