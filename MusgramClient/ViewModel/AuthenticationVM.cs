@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Net.Sockets;
+using MusgramClient.Services;
+using MusgramClient.Models;
 using System.Net;
 
 namespace MusgramClient.ViewModel
@@ -64,9 +66,38 @@ namespace MusgramClient.ViewModel
             }
         }
 
-
-        public AuthenticationVM()
+        private string regLogin;
+        public string RegLogin
         {
+            get
+            {
+                return regLogin;
+            }
+            set
+            {
+                regLogin = value;
+                RaisePropertyChanged();
+            }
+        }
+        private string regPassword;
+        public string RegPassword
+        {
+            get
+            {
+                return regPassword;
+            }
+            set
+            {
+                regPassword = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private IConnection connectionService;
+
+        public AuthenticationVM(IConnection connection)
+        {
+            connectionService = connection;
             Cur_Page = Page.LogIn;
         }
 
@@ -100,6 +131,19 @@ namespace MusgramClient.ViewModel
         {
             Cur_Page = Page.LogIn;
         }));
+
+        private ICommand registration;
+        public ICommand Registraion => registration ?? (registration = new RelayCommand(() =>
+        {
+            User userToReg = new User()
+            {
+                Login = RegLogin,
+                Password = RegPassword,
+                LastTimeOnline = DateTime.Now
+            };
+            connectionService.Register(userToReg);
+        }));
+
         public enum Page
         {
             LogIn,
