@@ -133,15 +133,10 @@ namespace MusgramClient.ViewModel
         }));
 
         private ICommand registration;
-        public ICommand Registraion => registration ?? (registration = new RelayCommand(() =>
+        public ICommand Registration => registration ?? (registration = new RelayCommand(() =>
         {
-            User userToReg = new User()
-            {
-                Login = RegLogin,
-                Password = RegPassword,
-                LastTimeOnline = DateTime.Now
-            };
-            connectionService.Register(userToReg);
+            Register();
+            Cur_Page = Page.LogIn;
         }));
 
         public enum Page
@@ -151,6 +146,17 @@ namespace MusgramClient.ViewModel
             ForgotPasswordEM,
             ForgotPasswordEC,
             ForgotPasswordCP
+        }
+
+        private void Register()
+        {
+            User userToReg = new User()
+            {
+                Login = RegLogin,
+                Password = RegPassword,
+                LastTimeOnline = DateTime.Now
+            };
+            connectionService.Register(userToReg);
         }
     }
 }
