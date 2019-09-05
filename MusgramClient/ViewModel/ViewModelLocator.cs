@@ -16,6 +16,7 @@ using CommonServiceLocator;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using MusgramClient.Services;
+using MusgramClient.Views;
 
 namespace MusgramClient.ViewModel
 {
@@ -31,10 +32,11 @@ namespace MusgramClient.ViewModel
         public ViewModelLocator()
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
-
+            
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<AuthenticationVM>();
             SimpleIoc.Default.Register<IConnection, ConnectionService>();
+           
         }
 
         public MainViewModel Main

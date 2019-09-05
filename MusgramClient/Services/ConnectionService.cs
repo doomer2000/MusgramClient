@@ -19,16 +19,15 @@ namespace MusgramClient.Services
 
         public ConnectionService()
         {
-            ip = "10.2.25.50";
+            ip = "172.20.28.69";
             port = "27001";
             httpClient = new HttpClient();
         }
 
         public void Register(User userToRegister)
         {
-            HttpClient httpClient = new HttpClient();
             HttpRequestMessage postMes = new HttpRequestMessage();
-            postMes.RequestUri = new Uri($"http://{ip}:{port}/GetProfile/");
+            postMes.RequestUri = new Uri($"http://{ip}:{port}/Registration/");
             postMes.Method = HttpMethod.Post;
             string jsonUser = JsonConvert.SerializeObject(userToRegister);
             postMes.Content = new StringContent(jsonUser);

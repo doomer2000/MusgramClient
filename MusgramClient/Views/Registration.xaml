@@ -21,19 +21,19 @@
     <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock Margin="0 45 0 0" DockPanel.Dock="Top" HorizontalAlignment="Center"
+                <TextBlock  Margin="0 45 0 0" DockPanel.Dock="Top" HorizontalAlignment="Center"
                        Text="Wooden Wheel" FontSize="50" Foreground="Purple"/>
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                     <TextBlock Text="Логин" Margin="0 0 5 0"/>
-                    <TextBox Width="250" FontSize="25"/>
+                    <TextBox Text="{Binding RegLogin,Mode=OneWayToSource}" Width="250" FontSize="25"/>
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                     <TextBlock Text="Электронная почта" Margin="0 0 5 0"/>
-                    <TextBox Width="250" FontSize="25"/>
+                    <TextBox Text="{Binding RegEmail,Mode=OneWayToSource}"  Width="250" FontSize="25"/>
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                     <TextBlock Text="Номер телефона" Margin="0 0 5 0"/>
-                    <TextBox Name="PhoneTB" PreviewTextInput="PhoneTB_PreviewTextInput"  Width="250" FontSize="25"/>
+                    <TextBox Text="{Binding RegMobileNum,Mode=OneWayToSource}" Name="PhoneTB" PreviewTextInput="PhoneTB_PreviewTextInput"  Width="250" FontSize="25"/>
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                     <StackPanel Orientation="Horizontal">
@@ -62,7 +62,7 @@
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                     <TextBlock Text="Пароль" Margin="0 0 5 0"/>
-                    <PasswordBox Width="250" FontSize="25"/>
+                    <PasswordBox x:Name="regPwdBox" Width="250" FontSize="25"/>
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                     <TextBlock Text="Секретный вопрос" Margin="0 0 5 0"/>
@@ -74,7 +74,7 @@
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                     <Button Command="{Binding LogInPageOpen}" Margin="0 0 25 0" Height="40" Content="Назад" FontSize="23"/>
-                    <Button Command="{Binding Registration}" Height="40" Content="Зарегистрироваться" FontSize="23"/>
+                    <Button Command="{Binding Registration}" CommandParameter="{Binding ElementName=regPwdBox}" Height="40" Content="Зарегистрироваться" FontSize="23"/>
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>

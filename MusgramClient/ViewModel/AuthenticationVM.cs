@@ -11,6 +11,9 @@ using System.Net.Sockets;
 using MusgramClient.Services;
 using MusgramClient.Models;
 using System.Net;
+using Unity;
+using MusgramClient.Views;
+using System.Windows.Controls;
 
 namespace MusgramClient.ViewModel
 {
@@ -79,13 +82,47 @@ namespace MusgramClient.ViewModel
                 RaisePropertyChanged();
             }
         }
+
+
+        private string regEmail;
+
+        public string RegEmail
+        {
+            get
+            {
+                return regEmail;
+            }
+            set
+            {
+                regEmail = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private string regMobileNum;
+
+        public string RegMobileNum
+        {
+            get
+            {
+                return regMobileNum;
+            }
+            set
+            {
+                regMobileNum = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private string regPassword;
+
         public string RegPassword
         {
             get
             {
                 return regPassword;
             }
+
             set
             {
                 regPassword = value;
@@ -94,10 +131,12 @@ namespace MusgramClient.ViewModel
         }
 
         private IConnection connectionService;
+       
 
         public AuthenticationVM(IConnection connection)
         {
             connectionService = connection;
+           
             Cur_Page = Page.LogIn;
         }
 
@@ -133,8 +172,9 @@ namespace MusgramClient.ViewModel
         }));
 
         private ICommand registration;
-        public ICommand Registration => registration ?? (registration = new RelayCommand(() =>
+        public ICommand Registration => registration ?? (registration = new RelayCommand<PasswordBox>((obj) =>
         {
+            RegPassword = obj.Password;
             Register();
             Cur_Page = Page.LogIn;
         }));
@@ -154,6 +194,8 @@ namespace MusgramClient.ViewModel
             {
                 Login = RegLogin,
                 Password = RegPassword,
+                Mail=RegEmail,
+                MobileNum=RegMobileNum, 
                 LastTimeOnline = DateTime.Now
             };
             connectionService.Register(userToReg);
