@@ -11,5 +11,6 @@ namespace MusgramClient.Services
     {
         User TryLogin(string login, string password);
         void Register(User userToRegister);
+        User GetUserProfile(User user);
     }
 }

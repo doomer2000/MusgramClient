@@ -13,14 +13,14 @@
     <Grid>
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
             <TextBlock Margin="0 45 0 0" DockPanel.Dock="Top" HorizontalAlignment="Center"
-                       Text="Wooden Wheel" FontSize="50" Foreground="Purple"/>
+                       Text="Musgram" FontSize="90" Foreground="Purple"/>
             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                 <matdes:PackIcon Margin="0 0 5 0" Kind="Face">
                     <matdes:PackIcon.LayoutTransform>
                         <ScaleTransform CenterX="0.7" CenterY="0.7" ScaleX="2.2" ScaleY="2.2"/>
                     </matdes:PackIcon.LayoutTransform>
                 </matdes:PackIcon>
-                <TextBox FontSize="20" Width="230"/>
+                <TextBox Text="{Binding Login}" FontSize="20" Width="230"/>
             </StackPanel>
             <StackPanel HorizontalAlignment="Center" Margin="0 10 0 0" Orientation="Horizontal">
                 <matdes:PackIcon Margin="0 0 5 0" Kind="Key">
@@ -28,12 +28,12 @@
                         <ScaleTransform CenterX="0.7" CenterY="0.7" ScaleX="2.2" ScaleY="2.2"/>
                     </matdes:PackIcon.LayoutTransform>
                 </matdes:PackIcon>
-                <PasswordBox FontSize="20" Width="230"/>
+                <PasswordBox x:Name="logPwdBox" FontSize="20" Width="230"/>
             </StackPanel>
             <Button HorizontalAlignment="Center" Content="Забыли пароль?" Foreground="Blue" FontSize="20"
                        Command="{Binding FPEMOpen}" BorderThickness="0" Background="Transparent"/>
             <StackPanel HorizontalAlignment="Center" Margin="0 10 0 0" Orientation="Horizontal">
-                <Button Content="Войти" FontSize="17" Margin="0 0 15 0"/>
+                <Button Command="{Binding TryLogin}" CommandParameter="{Binding ElementName=logPwdBox}" Content="Войти" FontSize="17" Margin="0 0 15 0"/>
                 <Button Command="{Binding RegistrationPageOpen}" Content="Зарегистрироваться" FontSize="17"/>
             </StackPanel>
         </StackPanel>

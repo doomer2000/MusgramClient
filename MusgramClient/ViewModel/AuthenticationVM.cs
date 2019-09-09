@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GalaSoft.MvvmLight;
+using System.Windows.Forms;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using System.Linq;
@@ -14,6 +15,9 @@ using System.Net;
 using Unity;
 using MusgramClient.Views;
 using System.Windows.Controls;
+using System.Security;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace MusgramClient.ViewModel
 {
@@ -175,8 +179,26 @@ namespace MusgramClient.ViewModel
         public ICommand Registration => registration ?? (registration = new RelayCommand<PasswordBox>((obj) =>
         {
             RegPassword = obj.Password;
-            Register();
+            obj.SecurePassword.Dispose();
+            Task.Run(() =>
+            {
+                Register();
+            });
+            RegPassword = "";
             Cur_Page = Page.LogIn;
+        }));
+        private ICommand tryLogin;
+        public ICommand TryLogin => tryLogin ?? (tryLogin = new RelayCommand<PasswordBox>((obj)=> {
+            Password = obj.Password;
+            User user = new User();
+            Task.Run(() =>
+            {
+                user = connectionService.TryLogin(Login, Password);
+            }).ContinueWith(new Action<Task>((a) => {
+                Password = "";
+                obj.SecurePassword.Dispose();
+                Debug.WriteLine(user.Login);
+            }));
         }));
 
         public enum Page
@@ -187,7 +209,6 @@ namespace MusgramClient.ViewModel
             ForgotPasswordEC,
             ForgotPasswordCP
         }
-
         private void Register()
         {
             User userToReg = new User()
