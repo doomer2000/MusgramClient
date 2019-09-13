@@ -21,7 +21,6 @@ namespace MusgramClient.Models
         public virtual SecretQuestion SecretQuestion { get; set; }
         public ICollection<Music> UserMusic { get; set; }
         public ICollection<Device> Devices { get; set; }
-
-        public ICollection<User> UserFriends { get; set; }
+        public ICollection<Friend> UserFriends { get; set; }
     }
 }

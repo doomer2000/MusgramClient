@@ -35,8 +35,17 @@ namespace MusgramClient.ViewModel
             
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<AuthenticationVM>();
+            SimpleIoc.Default.Register<ChatVM>();
             SimpleIoc.Default.Register<IConnection, ConnectionService>();
            
+        }
+
+        public ChatVM Chat
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<ChatVM>();
+            }
         }
 
         public MainViewModel Main

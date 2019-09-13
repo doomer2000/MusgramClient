@@ -33,7 +33,7 @@
             <Button HorizontalAlignment="Center" Content="Забыли пароль?" Foreground="Blue" FontSize="20"
                        Command="{Binding FPEMOpen}" BorderThickness="0" Background="Transparent"/>
             <StackPanel HorizontalAlignment="Center" Margin="0 10 0 0" Orientation="Horizontal">
-                <Button Command="{Binding TryLogin}" CommandParameter="{Binding ElementName=logPwdBox}" Content="Войти" FontSize="17" Margin="0 0 15 0"/>
+                <Button IsEnabled="{Binding IsNoRequested}" Command="{Binding TryLogin}" CommandParameter="{Binding ElementName=logPwdBox}" Content="Войти" FontSize="17" Margin="0 0 15 0"/>
                 <Button Command="{Binding RegistrationPageOpen}" Content="Зарегистрироваться" FontSize="17"/>
             </StackPanel>
         </StackPanel>

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Net.Sockets;
+using GalaSoft.MvvmLight.Messaging;
 using MusgramClient.Services;
 using MusgramClient.Models;
 using System.Net;
@@ -118,6 +119,20 @@ namespace MusgramClient.ViewModel
             }
         }
 
+        private bool isNoRequested;
+        public bool IsNoRequested
+        {
+            get
+            {
+                return isNoRequested;
+            }
+            set
+            {
+                isNoRequested = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private string regPassword;
 
         public string RegPassword
@@ -135,12 +150,12 @@ namespace MusgramClient.ViewModel
         }
 
         private IConnection connectionService;
-       
+
 
         public AuthenticationVM(IConnection connection)
         {
             connectionService = connection;
-           
+            isNoRequested = true;
             Cur_Page = Page.LogIn;
         }
 
@@ -151,21 +166,25 @@ namespace MusgramClient.ViewModel
         }));
 
         private ICommand fPSendCode;
-        public ICommand FPSendCode => fPSendCode ?? (fPSendCode = new RelayCommand(() => {
+        public ICommand FPSendCode => fPSendCode ?? (fPSendCode = new RelayCommand(() =>
+        {
         }));
 
         private ICommand fPEMOpen;
-        public ICommand FPEMOpen => fPEMOpen ?? (fPEMOpen = new RelayCommand(() => {
+        public ICommand FPEMOpen => fPEMOpen ?? (fPEMOpen = new RelayCommand(() =>
+        {
             Cur_Page = Page.ForgotPasswordEM;
         }));
 
         private ICommand fPECOpen;
-        public ICommand FPECOpen => fPECOpen ?? (fPECOpen = new RelayCommand(() => {
+        public ICommand FPECOpen => fPECOpen ?? (fPECOpen = new RelayCommand(() =>
+        {
             Cur_Page = Page.ForgotPasswordEC;
         }));
 
         private ICommand fPCPOpen;
-        public ICommand FPCPOpen => fPCPOpen ?? (fPCPOpen = new RelayCommand(() => {
+        public ICommand FPCPOpen => fPCPOpen ?? (fPCPOpen = new RelayCommand(() =>
+        {
             Cur_Page = Page.ForgotPasswordCP;
         }));
 
@@ -179,25 +198,40 @@ namespace MusgramClient.ViewModel
         public ICommand Registration => registration ?? (registration = new RelayCommand<PasswordBox>((obj) =>
         {
             RegPassword = obj.Password;
-            obj.SecurePassword.Dispose();
             Task.Run(() =>
             {
                 Register();
+            }).ContinueWith((a) =>
+            {
+                obj.SecurePassword.Dispose();
+                RegPassword = "";
             });
-            RegPassword = "";
             Cur_Page = Page.LogIn;
         }));
         private ICommand tryLogin;
-        public ICommand TryLogin => tryLogin ?? (tryLogin = new RelayCommand<PasswordBox>((obj)=> {
+        public ICommand TryLogin => tryLogin ?? (tryLogin = new RelayCommand<PasswordBox>((obj) =>
+        {
             Password = obj.Password;
             User user = new User();
+            IsNoRequested = false;
             Task.Run(() =>
             {
                 user = connectionService.TryLogin(Login, Password);
-            }).ContinueWith(new Action<Task>((a) => {
+            }).ContinueWith(new Action<Task>((a) =>
+            {
                 Password = "";
                 obj.SecurePassword.Dispose();
-                Debug.WriteLine(user.Login);
+                IsNoRequested = true;
+                if (user.Id > 0)
+                {
+                    Properties.Settings.Default.Login = user.Login;
+                    Properties.Settings.Default.Password = user.Password;
+                    Messenger.Default.Send<string>("", "Open Chat");
+                    Messenger.Default.Register<string>("", "ready", (aeee)=>
+                    {
+                        Messenger.Default.Send<User>(user, "User");
+                    });
+                }
             }));
         }));
 
@@ -215,8 +249,8 @@ namespace MusgramClient.ViewModel
             {
                 Login = RegLogin,
                 Password = RegPassword,
-                Mail=RegEmail,
-                MobileNum=RegMobileNum, 
+                Mail = RegEmail,
+                MobileNum = RegMobileNum,
                 LastTimeOnline = DateTime.Now
             };
             connectionService.Register(userToReg);

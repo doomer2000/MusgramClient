@@ -11,6 +11,9 @@
         <DataTemplate x:Key="Authentication">
             <local:Authentication/>
         </DataTemplate>
+        <DataTemplate x:Key="Chat">
+            <local:Chat/>
+        </DataTemplate>
     </Window.Resources>
     <Grid>
         <ContentControl Content="{Binding}">
@@ -19,6 +22,9 @@
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Cur_Page}" Value="Authentication">
                             <Setter Property="ContentTemplate" Value="{StaticResource Authentication}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Cur_Page}" Value="Chat">
+                            <Setter Property="ContentTemplate" Value="{StaticResource Chat}"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

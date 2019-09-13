@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace MusgramClient.Models
 {
-    public class GeneralChatUsers
+    public class ChatMember
     {
-        public GeneralChat GeneralChatId { get; set; }
+        public int Id { get; set; }
+        public Chat GeneralChatId { get; set; }
         public User UserId { get; set; }
-        public bool IsShow { get; set; }
     }
 }

@@ -17,6 +17,7 @@ namespace MusgramClient.Services
         private readonly string ip;
         private readonly string port;
         private TcpClient tcpClient;
+        private TcpListener tcpListener;
 
         public ConnectionService()
         {
@@ -24,9 +25,20 @@ namespace MusgramClient.Services
             port = "27001";
             httpClient = new HttpClient();
             tcpClient = new TcpClient();
+            //tcpListener = new TcpListener();
         }
 
-        public bool SendMessage(ChatMsg chatMsg)
+        public ICollection<User> GetFriends(int id)
+        {
+            HttpRequestMessage getMes = new HttpRequestMessage();
+            getMes.RequestUri = new Uri($"http://{ip}:{port}/GetFriends/{id}");
+            getMes.Method = HttpMethod.Get;
+            var a = httpClient.SendAsync(getMes).Result;
+            string content = a.Content.ReadAsStringAsync().Result;
+            return JsonConvert.DeserializeObject<ICollection<User>>(content);
+        }
+
+        public bool SendMessage(Message chatMsg)
         {
             HttpRequestMessage postMes = new HttpRequestMessage();
             postMes.RequestUri = new Uri($"http://{ip}:{port}/SendMessage/");
@@ -40,11 +52,6 @@ namespace MusgramClient.Services
 
         public void Register(User userToRegister)
         {
-            userToRegister.Devices = new List<Device>();
-            userToRegister.Devices.Add(new Device()
-            {
-                IpAdress = getLocalIPAddress()
-            });
             HttpRequestMessage postMes = new HttpRequestMessage();
             postMes.RequestUri = new Uri($"http://{ip}:{port}/Registration/");
             postMes.Method = HttpMethod.Post;
@@ -64,16 +71,31 @@ namespace MusgramClient.Services
             return JsonConvert.DeserializeObject<User>(content);
         }
 
+        public bool CreateChat(MyChat chatTC)
+        {
+            HttpRequestMessage postMes = new HttpRequestMessage();
+            postMes.RequestUri = new Uri($"http://{ip}:{port}/CreateChat/");
+            postMes.Method = HttpMethod.Post;
+            string jsonUser = JsonConvert.SerializeObject(chatTC);
+            postMes.Content = new StringContent(jsonUser);
+            httpClient.SendAsync(postMes);
+            
+        }
+
         public User TryLogin(string login, string password)
         {
             HttpRequestMessage postMes = new HttpRequestMessage();
             postMes.RequestUri = new Uri($"http://{ip}:{port}/TryLogin/");
             postMes.Method = HttpMethod.Post;
-            postMes.Content = new StringContent($"&1234&&{getLocalIPAddress()}");
+            postMes.Content = new StringContent($"&{login}&{password}&{getLocalIPAddress()}");
             var a = httpClient.SendAsync(postMes).Result;
             string content = a.Content.ReadAsStringAsync().Result;
-            tcpClient.Connect(IPAddress.Parse(ip), int.Parse(port));
-            return JsonConvert.DeserializeObject<User>(content);
+            //tcpClient.Connect(IPAddress.Parse(ip), int.Parse(port));
+            if(JsonConvert.DeserializeObject<User>(content).Id == 0)
+            {
+                throw new Exception();
+            }
+            else return JsonConvert.DeserializeObject<User>(content);
         }
 
         private string getLocalIPAddress()

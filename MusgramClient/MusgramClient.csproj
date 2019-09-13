@@ -53,11 +53,15 @@
     <Reference Include="MaterialDesignThemes.Wpf, Version=2.6.0.325, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignThemes.2.6.0\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="NAudio, Version=1.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.1.9.0\lib\net35\NAudio.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
@@ -90,6 +94,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\Device.cs" />
+    <Compile Include="Models\Friend.cs" />
+    <Compile Include="Models\MyChat.cs" />
+    <Compile Include="Services\CallService.cs" />
     <Compile Include="Services\ConnectionService.cs" />
     <Compile Include="Services\IConnection.cs" />
     <Compile Include="ViewModel\AuthenticationVM.cs" />
@@ -174,9 +181,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\ChatMsg.cs" />
-    <Compile Include="Models\GeneralChat.cs" />
-    <Compile Include="Models\GeneralChatUsers.cs" />
+    <Compile Include="Models\Message.cs" />
+    <Compile Include="Models\Chat.cs" />
+    <Compile Include="Models\ChatMember.cs" />
     <Compile Include="Models\Music.cs" />
     <Compile Include="Models\SecretQuestion.cs" />
     <Compile Include="Models\User.cs" />

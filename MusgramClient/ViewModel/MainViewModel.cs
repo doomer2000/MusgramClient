@@ -1,5 +1,6 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
+using MusgramClient.Models;
 
 namespace MusgramClient.ViewModel
 {
