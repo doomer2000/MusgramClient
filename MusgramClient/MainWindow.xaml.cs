@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MusgramClient.EF;
+using MusgramClient.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +25,7 @@ namespace MusgramClient
         public MainWindow()
         {
             InitializeComponent();
+            MusgramContext context = new MusgramContext();
         }
     }
 }

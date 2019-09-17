@@ -9,7 +9,7 @@ namespace MusgramClient.Models
     public class ChatMember
     {
         public int Id { get; set; }
-        public Chat GeneralChatId { get; set; }
-        public User UserId { get; set; }
+        public User User { get; set; }
+        public Chat Chat { get; set; }
     }
 }

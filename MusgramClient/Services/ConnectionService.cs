@@ -79,7 +79,7 @@ namespace MusgramClient.Services
             string jsonUser = JsonConvert.SerializeObject(chatTC);
             postMes.Content = new StringContent(jsonUser);
             httpClient.SendAsync(postMes);
-            
+            return true;
         }
 
         public User TryLogin(string login, string password)
