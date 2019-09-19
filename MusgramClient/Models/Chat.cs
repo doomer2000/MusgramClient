@@ -13,6 +13,8 @@ namespace MusgramClient.Models
         public bool IsPrivate { get; set; }
         public string Title { get; set; }
         public string ImagePath { get; set; }
-        public ICollection<User> ChatMembers { get; set; }
+        [NonSerialized]
+        public ICollection<Message> Messages;
+        public ICollection<ChatMember> ChatMembers { get; set; }
     }
 }

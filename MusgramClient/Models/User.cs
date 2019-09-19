@@ -14,8 +14,10 @@ namespace MusgramClient.Models
         public string Mail { get; set; }
         public string MobileNum { get; set; }
         public bool IsOnline { get; set; }
-        public DateTime LastTimeOnline { get; set; }
+        public string LastTimeOnline { get; set; }
         public string AvatarPath { get; set; }
+
+
 
         public ICollection<Music> UserMusic { get; set; }
         public ICollection<Device> Devices { get; set; }

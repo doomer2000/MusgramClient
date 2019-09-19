@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using GalaSoft.MvvmLight.Messaging;
 using MusgramClient.Models;
 using Newtonsoft.Json;
 
@@ -13,19 +16,20 @@ namespace MusgramClient.Services
 {
     public class ConnectionService : IConnection
     {
+        private SqLiteService sqLiteConnection;
+        private TcpConnection tcpConnection;
+
         private HttpClient httpClient;
         private readonly string ip;
         private readonly string port;
-        private TcpClient tcpClient;
-        private TcpListener tcpListener;
 
         public ConnectionService()
         {
-            ip = "192.168.31.48";
+            tcpConnection = new TcpConnection();
+            sqLiteConnection = new SqLiteService();
+            ip = "192.168.0.110";
             port = "27001";
             httpClient = new HttpClient();
-            tcpClient = new TcpClient();
-            //tcpListener = new TcpListener();
         }
 
         public ICollection<User> GetFriends(int id)
@@ -40,13 +44,6 @@ namespace MusgramClient.Services
 
         public bool SendMessage(Message chatMsg)
         {
-            HttpRequestMessage postMes = new HttpRequestMessage();
-            postMes.RequestUri = new Uri($"http://{ip}:{port}/SendMessage/");
-            postMes.Method = HttpMethod.Post;
-            string jsonUser = JsonConvert.SerializeObject(chatMsg);
-            postMes.Content = new StringContent($"{jsonUser}");
-            var a = httpClient.SendAsync(postMes).Result;
-            string content = a.Content.ReadAsStringAsync().Result;
             return true;
         }
 
@@ -71,7 +68,7 @@ namespace MusgramClient.Services
             return JsonConvert.DeserializeObject<User>(content);
         }
 
-        public bool CreateChat(MyChat chatTC)
+        public bool CreateChat(Chat chatTC)
         {
             HttpRequestMessage postMes = new HttpRequestMessage();
             postMes.RequestUri = new Uri($"http://{ip}:{port}/CreateChat/");
@@ -87,28 +84,42 @@ namespace MusgramClient.Services
             HttpRequestMessage postMes = new HttpRequestMessage();
             postMes.RequestUri = new Uri($"http://{ip}:{port}/TryLogin/");
             postMes.Method = HttpMethod.Post;
-            postMes.Content = new StringContent($"&{login}&{password}&{getLocalIPAddress()}");
+            postMes.Content = new StringContent($"&{login}&{password}");
             var a = httpClient.SendAsync(postMes).Result;
             string content = a.Content.ReadAsStringAsync().Result;
             //tcpClient.Connect(IPAddress.Parse(ip), int.Parse(port));
-            if(JsonConvert.DeserializeObject<User>(content).Id == 0)
+            User loggined = JsonConvert.DeserializeObject<User>(content);
+            if (null == loggined)
             {
                 throw new Exception();
             }
-            else return JsonConvert.DeserializeObject<User>(content);
+            else
+            {
+                tcpConnection.RegInServer(loggined.Id, ip, 8080);
+                Task.Run(() =>
+                {
+                    while (true)
+                    {
+                        tcpConnection.Listen();
+                    }
+                });
+                sqLiteConnection.AddUser(loggined);
+                loggined.Password.Remove(loggined.Password.Length - 9);
+                return loggined;
+            }
         }
 
-        private string getLocalIPAddress()
-        {
-            var host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (var ip in host.AddressList)
-            {
-                if (ip.AddressFamily == AddressFamily.InterNetwork)
-                {
-                    return ip.ToString();
-                }
-            }
-            return null;
-        }
+        //private string getLocalIPAddress()
+        //{
+        //    var host = Dns.GetHostEntry(Dns.GetHostName());
+        //    foreach (var ip in host.AddressList)
+        //    {
+        //        if (ip.AddressFamily == AddressFamily.InterNetwork)
+        //        {
+        //            return ip.ToString();
+        //        }
+        //    }
+        //    return null;
+        //}
     }
 }

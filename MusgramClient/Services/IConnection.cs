@@ -9,7 +9,7 @@ namespace MusgramClient.Services
 {
     public interface IConnection
     {
-        bool CreateChat(MyChat chatTC);
+        bool CreateChat(Chat chatTC);
         User TryLogin(string login, string password);
         void Register(User userToRegister);
 

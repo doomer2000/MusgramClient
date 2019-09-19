@@ -12,6 +12,8 @@ namespace MusgramClient.ViewModel
 {
     public class ChatVM : ViewModelBase
     {
+
+
         private User currentUser;
         public User CurrentUser
         {
@@ -61,28 +63,26 @@ namespace MusgramClient.ViewModel
             connectionService = connection;
             Messenger.Default.Register<User>(this, "User", (u) => CurrentUser = u);
             Messenger.Default.Send<string>("", "ready");
+            Messenger.Default.Register<Message>(this, "Message", (m) =>newMessageGeted(m));
             //CurrentUser.UserFriends = connectionService.GetFriends();
-            int a = 500;
-
-            List<User> members = new List<User>()
-            {
-                new User(){Id=currentUser.Id},
-                new User(){Id=2},
-                new User(){Id=3}
-            };
-
-            Chat chat = new Chat()
-            {
-                Title = "Test",
-                IsPrivate = false,
-                ChatMembers = members
-            };
-            MyChat myChat = new MyChat()
-            {
-                Chat = chat,
-                User = currentUser
-            };
-            connectionService.CreateChat(myChat);
+            //List<Срф> members = new List<User>()
+            //{
+            //    new User(){Id=currentUser.Id},
+            //    new User(){Id=2},
+            //    new User(){Id=3}
+            //};
+            //
+            //Chat chat = new Chat()
+            //{
+            //    Title = "Test",
+            //    IsPrivate = false,
+            //    ChatMembers = members
+            //};
+            //connectionService.CreateChat(chat);
+        }
+        private void newMessageGeted(Message message)
+        {
+            
         }
     }
 }

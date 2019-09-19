@@ -227,7 +227,7 @@ namespace MusgramClient.ViewModel
                     Properties.Settings.Default.Login = user.Login;
                     Properties.Settings.Default.Password = user.Password;
                     Messenger.Default.Send<string>("", "Open Chat");
-                    Messenger.Default.Register<string>("", "ready", (aeee)=>
+                    Messenger.Default.Register<string>("", "ready", (b)=>
                     {
                         Messenger.Default.Send<User>(user, "User");
                     });
@@ -251,7 +251,7 @@ namespace MusgramClient.ViewModel
                 Password = RegPassword,
                 Mail = RegEmail,
                 MobileNum = RegMobileNum,
-                LastTimeOnline = DateTime.Now
+                LastTimeOnline = DateTime.Now.ToString()
             };
             connectionService.Register(userToReg);
         }
