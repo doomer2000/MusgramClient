@@ -14,7 +14,7 @@
             <ColumnDefinition Width="80*"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0">
-            <ListBox ItemsSource="{Binding CurrentUser.UserFriends}">
+            <ListBox ItemsSource="{Binding UserChats}">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel/>
@@ -28,7 +28,7 @@
                                     <ImageBrush ImageSource="/Image/profile.jpg"/>
                                 </Ellipse.Fill>
                             </Ellipse>
-                            <TextBlock Text="{Binding _Friend.Login}" FontSize="20" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding Title}" FontSize="20" VerticalAlignment="Center"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -84,7 +84,7 @@
                         </Button.Content>
                     </Button>
                     <StackPanel Orientation="Horizontal">
-                        <TextBox Width="250"/>
+                        <TextBox FontSize="25"/>
                         <TextBox Text="{Binding MessegeTS}" FontSize="55"/>
                     </StackPanel>
                 </DockPanel>

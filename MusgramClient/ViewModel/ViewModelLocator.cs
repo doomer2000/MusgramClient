@@ -37,7 +37,7 @@ namespace MusgramClient.ViewModel
             SimpleIoc.Default.Register<AuthenticationVM>();
             SimpleIoc.Default.Register<ChatVM>();
             SimpleIoc.Default.Register<IConnection, ConnectionService>();
-           
+            SimpleIoc.Default.Register<ISQLiteConnection, SqLiteService>();
         }
 
         public ChatVM Chat

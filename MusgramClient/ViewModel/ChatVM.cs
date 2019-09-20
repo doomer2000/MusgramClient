@@ -30,6 +30,20 @@ namespace MusgramClient.ViewModel
             }
         }
 
+        private Chat selectedChat;
+        public Chat SelectedChat
+        {
+            get
+            {
+                return selectedChat;
+            }
+            set
+            {
+                selectedChat = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private ISQLiteConnection sQLite;
 
         private User currentUser;
@@ -80,6 +94,7 @@ namespace MusgramClient.ViewModel
         {
             sQLite = sQLiteConnection;
             connectionService = connection;
+            LoadFromLocal();
             Messenger.Default.Register<User>(this, "User", (u) => CurrentUser = u);
             Messenger.Default.Send<string>("", "ready");
             Messenger.Default.Register<Message>(this, "Message", (m) => newMessageGeted(m));
@@ -93,11 +108,16 @@ namespace MusgramClient.ViewModel
         private ICommand sendMessage;
         public ICommand SendMessage => sendMessage ?? (sendMessage = new RelayCommand(() =>
         {
-            
+            connectionService.SendMessage(new Message() { SendTime = DateTime.Now, Text = MessegeTS, User = new User() { Id = CurrentUser.Id }, Chat = SelectedChat });
         }));
         private void newMessageGeted(Message message)
         {
             
+        }
+        private async void LoadFromLocal()
+        {
+            UserChats = new ObservableCollection<Chat>(await sQLite.GetChats());
+            //error
         }
     }
 }

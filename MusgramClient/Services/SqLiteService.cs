@@ -42,15 +42,15 @@ namespace MusgramClient.Services
         {
             using (IDbConnection cnct = new SQLiteConnection(LoadConnectionString()))
             {
-                var chats = await cnct.QueryAsync<Chat>("SELECT * FROM Chat", new DynamicParameters());
-                //using(IDbConnection cnct2 = new SQLiteConnection(LoadConnectionString()))
-                //{
-                //    foreach(Chat c in chats)
-                //    {
-                //        ChatMember = new ChatMember();
-                //        c.ChatMembers = await cnct.QueryAsync<ChatMember>("SELECT * FROM Chat", new DynamicParameters());
-                //    }
-                //}
+                var chats = await cnct.QueryAsync<Chat>("SELECT * FROM Chat");
+                using(IDbConnection cnct2 = new SQLiteConnection(LoadConnectionString()))
+                {
+                    foreach(Chat c in chats)
+                    {
+                        IEnumerable<ChatMember> member = await cnct2.QueryAsync<ChatMember>("SELECT * FROM ChatMember WHERE @Chat_FK = @Id",new { Id = c.Id });
+                        c.ChatMembers = member.ToList();
+                    }
+                }
                 return chats.ToList();
             }
         }
