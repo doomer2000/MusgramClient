@@ -14,7 +14,7 @@
             <ColumnDefinition Width="80*"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0">
-            <ListBox ItemsSource="{Binding UserChats}">
+            <ListBox ItemsSource="{Binding UserChats}" SelectedItem="{Binding ChatTSMessage,Mode=TwoWay}">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel/>
@@ -48,7 +48,7 @@
                                 <ImageBrush ImageSource="/Image/profile.jpg"/>
                             </Ellipse.Fill>
                         </Ellipse>
-                        <TextBlock Text="{Binding UserTSMessage.Login}" FontSize="35" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding ChatTSMessage.Title}" FontSize="35" VerticalAlignment="Center"/>
                     </StackPanel>
                     <Button DockPanel.Dock="Right" Height="70">
                         <Button.Content>

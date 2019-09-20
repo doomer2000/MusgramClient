@@ -47,7 +47,7 @@ namespace MusgramClient.Services
                 {
                     foreach(Chat c in chats)
                     {
-                        IEnumerable<ChatMember> member = await cnct2.QueryAsync<ChatMember>("SELECT * FROM ChatMember WHERE @Chat_FK = @Id",new { Id = c.Id });
+                        IEnumerable<ChatMember> member = await cnct2.QueryAsync<ChatMember>("SELECT * FROM ChatMember WHERE Chat_FK = @Id",c);
                         c.ChatMembers = member.ToList();
                     }
                 }
