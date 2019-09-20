@@ -18,7 +18,6 @@ namespace MusgramClient.Services
     {
         private SqLiteService sqLiteConnection;
         private TcpConnection tcpConnection;
-
         private HttpClient httpClient;
         private readonly string ip;
         private readonly string port;
@@ -27,7 +26,7 @@ namespace MusgramClient.Services
         {
             tcpConnection = new TcpConnection();
             sqLiteConnection = new SqLiteService();
-            ip = "192.168.0.110";
+            ip = "192.168.0.101";
             port = "27001";
             httpClient = new HttpClient();
         }
@@ -44,6 +43,7 @@ namespace MusgramClient.Services
 
         public bool SendMessage(Message chatMsg)
         {
+            tcpConnection.SendMessage(chatMsg);
             return true;
         }
 
@@ -68,14 +68,22 @@ namespace MusgramClient.Services
             return JsonConvert.DeserializeObject<User>(content);
         }
 
-        public bool CreateChat(Chat chatTC)
+        public async Task<bool> CreateChat(Chat chatTC)
         {
             HttpRequestMessage postMes = new HttpRequestMessage();
             postMes.RequestUri = new Uri($"http://{ip}:{port}/CreateChat/");
             postMes.Method = HttpMethod.Post;
-            string jsonUser = JsonConvert.SerializeObject(chatTC);
-            postMes.Content = new StringContent(jsonUser);
-            httpClient.SendAsync(postMes);
+            string jsonChat = JsonConvert.SerializeObject(chatTC);
+            postMes.Content = new StringContent(jsonChat);
+            var a = httpClient.SendAsync(postMes).Result;
+            string content = a.Content.ReadAsStringAsync().Result;
+            Chat chat = JsonConvert.DeserializeObject<Chat>(content);
+            await sqLiteConnection.AddChat(chat);
+            foreach(ChatMember cm in chat.ChatMembers)
+            {
+                cm.Chat = chat;
+                await sqLiteConnection.AddChatMember(cm);
+            }
             return true;
         }
 
@@ -87,7 +95,6 @@ namespace MusgramClient.Services
             postMes.Content = new StringContent($"&{login}&{password}");
             var a = httpClient.SendAsync(postMes).Result;
             string content = a.Content.ReadAsStringAsync().Result;
-            //tcpClient.Connect(IPAddress.Parse(ip), int.Parse(port));
             User loggined = JsonConvert.DeserializeObject<User>(content);
             if (null == loggined)
             {
@@ -103,7 +110,7 @@ namespace MusgramClient.Services
                         tcpConnection.Listen();
                     }
                 });
-                sqLiteConnection.AddUser(loggined);
+                //sqLiteConnection.AddUser(loggined);
                 loggined.Password.Remove(loggined.Password.Length - 9);
                 return loggined;
             }

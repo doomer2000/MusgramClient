@@ -7,12 +7,30 @@ using MusgramClient.Models;
 using System.Threading.Tasks;
 using MusgramClient.Services;
 using GalaSoft.MvvmLight.Messaging;
+using Newtonsoft.Json;
+using System.Windows.Input;
+using GalaSoft.MvvmLight.Command;
+using System.Collections.ObjectModel;
 
 namespace MusgramClient.ViewModel
 {
     public class ChatVM : ViewModelBase
     {
+        private ObservableCollection<Chat> userChats;
+        public ObservableCollection<Chat> UserChats
+        {
+            get
+            {
+                return userChats;
+            }
+            set
+            {
+                userChats = value;
+                RaisePropertyChanged();
+            }
+        }
 
+        private ISQLiteConnection sQLite;
 
         private User currentUser;
         public User CurrentUser
@@ -44,42 +62,39 @@ namespace MusgramClient.ViewModel
             }
         }
 
-        private User userTSMessage;
-        public User UserTSMessage
+        private Chat chatTSMessage;
+        public Chat ChatTSMessage
         {
             get
             {
-                return userTSMessage;
+                return chatTSMessage;
             }
             set
             {
-                userTSMessage = value;
+                chatTSMessage = value;
                 RaisePropertyChanged();
             }
         }
 
-        public ChatVM(IConnection connection)
+        public ChatVM(IConnection connection,ISQLiteConnection sQLiteConnection)
         {
+            sQLite = sQLiteConnection;
             connectionService = connection;
             Messenger.Default.Register<User>(this, "User", (u) => CurrentUser = u);
             Messenger.Default.Send<string>("", "ready");
-            Messenger.Default.Register<Message>(this, "Message", (m) =>newMessageGeted(m));
-            //CurrentUser.UserFriends = connectionService.GetFriends();
-            //List<Срф> members = new List<User>()
-            //{
-            //    new User(){Id=currentUser.Id},
-            //    new User(){Id=2},
-            //    new User(){Id=3}
-            //};
-            //
-            //Chat chat = new Chat()
-            //{
-            //    Title = "Test",
-            //    IsPrivate = false,
-            //    ChatMembers = members
-            //};
+            Messenger.Default.Register<Message>(this, "Message", (m) => newMessageGeted(m));
+            //Chats = sq
+
             //connectionService.CreateChat(chat);
+
+            //connectionService.SendMessage(new Message() { SendTime = DateTime.Now,Text = "Hello world!", User = new User() { Id = 2 },Chat=chat,MessegeType=0});
         }
+
+        private ICommand sendMessage;
+        public ICommand SendMessage => sendMessage ?? (sendMessage = new RelayCommand(() =>
+        {
+            
+        }));
         private void newMessageGeted(Message message)
         {
             

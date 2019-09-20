@@ -20,7 +20,6 @@ namespace MusgramClient.Models
 
 
         public ICollection<Music> UserMusic { get; set; }
-        public ICollection<Device> Devices { get; set; }
         public ICollection<Friend> UserFriends { get; set; }
     }
 }

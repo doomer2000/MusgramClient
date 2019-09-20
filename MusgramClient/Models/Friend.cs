@@ -10,7 +10,7 @@ namespace MusgramClient.Models
     {
         public int Id { get; set; }
         public User User { get; set; }
-        public int _Friend_Id { get; set; }
+        public int? _Friend_Id { get; set; }
         public User _Friend { get; set; }
     }
 }

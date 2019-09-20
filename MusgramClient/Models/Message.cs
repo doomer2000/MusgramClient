@@ -20,13 +20,14 @@ namespace MusgramClient.Models
         //1-audio
         //2-image
         //3-video
+        //4-system
         public Music Music { get; set; }
         public string ImagePath { get; set; }
         public string VideoPath { get; set; }
         public string VoicePath { get; set; }
 
-        public User UserIdOfWho { get; set; }
-        public Chat GeneralChatId { get; set; }
+        public User User { get; set; }
+        public Chat Chat { get; set; }
 
     }
 }

@@ -19,6 +19,7 @@ using System.Windows.Controls;
 using System.Security;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using Message = MusgramClient.Models.Message;
 
 namespace MusgramClient.ViewModel
 {
@@ -224,6 +225,7 @@ namespace MusgramClient.ViewModel
                 IsNoRequested = true;
                 if (user.Id > 0)
                 {
+                    
                     Properties.Settings.Default.Login = user.Login;
                     Properties.Settings.Default.Password = user.Password;
                     Messenger.Default.Send<string>("", "Open Chat");

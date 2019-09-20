@@ -121,12 +121,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\ChatMember.cs" />
-    <Compile Include="Models\Device.cs" />
     <Compile Include="Models\Friend.cs" />
     <Compile Include="Models\UnreadMessage.cs" />
     <Compile Include="Services\CallService.cs" />
     <Compile Include="Services\ConnectionService.cs" />
     <Compile Include="Services\IConnection.cs" />
+    <Compile Include="Services\ISQLiteConnection.cs" />
     <Compile Include="Services\SqLiteService.cs" />
     <Compile Include="Services\TcpConnection.cs" />
     <Compile Include="ViewModel\AuthenticationVM.cs" />

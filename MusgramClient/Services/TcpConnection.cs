@@ -3,6 +3,8 @@ using MusgramClient.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Data.SQLite;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
@@ -16,6 +18,7 @@ namespace MusgramClient.Services
 {
     public class TcpConnection
     {
+        private SqLiteService sQLiteService;
         private TcpClient tcpClient;
         private StreamWriter writer;
         private StreamReader reader;
@@ -36,31 +39,30 @@ namespace MusgramClient.Services
         }
         public void Listen()
         {
-            Task.Run(() =>
+            while (true)
             {
-                while (true)
+                try
                 {
-                    try
+                    var message = reader.ReadLine();
+                    var data = message.Split('~')[message.Split('~').Length - 1];
+                    var command = message.Split('~').Last();
+                    switch(command)
                     {
-                        var message = reader.ReadLine();
-                        var data = message.Split('~')[message.Split('~').Length - 1];
-                        var command = message.Split('~').Last();
-                        switch(command)
-                        {
-                            case "new-message":
-
-                                break;
-                        }
+                        case "new-message":
+                            new Task(() => {
+                                Message chatMessage = JsonConvert.DeserializeObject<Message>(data);
+                            });
+                            break;
                     }
-                    catch { }
                 }
-            });
+                catch { }
+            }
         }
 
         public void SendMessage(Message message)
         {
             string mesJson = JsonConvert.SerializeObject(message);
-            string data = JsonConvert.SerializeObject(message) + "~" + "send-message";
+            string data = mesJson + "~" + "send-message";
             SendDataToServer(data);
         }
         private bool SendDataToServer(string message)

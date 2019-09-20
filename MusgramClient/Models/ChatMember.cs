@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,8 @@ namespace MusgramClient.Models
     public class ChatMember
     {
         public int Id { get; set; }
-        public User User { get; set; }
+        [JsonIgnore]
         public Chat Chat { get; set; }
+        public User User { get; set; }
     }
 }

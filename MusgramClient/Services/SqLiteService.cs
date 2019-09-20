@@ -11,44 +11,93 @@ using System.Threading.Tasks;
 
 namespace MusgramClient.Services
 {
-    public class SqLiteService
+    public class SqLiteService : ISQLiteConnection
     {
-        public void AddMessage(Message mes)
+        public async Task AddMessage(Message mes)
         {
             using (IDbConnection cnct = new SQLiteConnection(LoadConnectionString()))
             {
-                cnct.Execute("INSERT INTO Messages VALUES " +
+                await cnct.ExecuteAsync("INSERT INTO Messages VALUES " +
                     "(@Id,@Text,@SendTime," +
                     "@MessageType,@Music_Id," +
                     "@ImagePath,@VideoPath," +
                     "@VoicePath,@User_Id," +
                     "@Chat_Id)"
-                    , new {mes.Id, mes.Text,SendTime = mes.SendTime.ToString(),
-                    mes.MessegeType, Music_Id = mes.Music.Id,
-                    mes.ImagePath,mes.VideoPath,
-                    mes.VoicePath,mes.UserIdOfWho,
-                    Chat_Id = mes.GeneralChatId});
+                    , new
+                    {
+                        mes.Id,
+                        mes.Text,
+                        SendTime = mes.SendTime.ToString(),
+                        mes.MessegeType,
+                        Music_Id = mes.Music.Id,
+                        mes.ImagePath,
+                        mes.VideoPath,
+                        mes.VoicePath,
+                        User_Id = mes.User.Id,
+                        Chat_Id = mes.Chat.Id
+                    });
             }
         }
-        public List<Chat> GetChats()
-        {
-            using(IDbConnection cnct = new SQLiteConnection(LoadConnectionString()))
-            {
-                var chats = cnct.Query<Chat>("SELECT * FROM Chat", new DynamicParameters());
-                return chats.ToList();
-            }
-        }
-        public void AddUser(User user)
+        public async Task<ICollection<Chat>> GetChats()
         {
             using (IDbConnection cnct = new SQLiteConnection(LoadConnectionString()))
             {
-                cnct.Execute("INSERT INTO User " +
+                var chats = await cnct.QueryAsync<Chat>("SELECT * FROM Chat", new DynamicParameters());
+                //using(IDbConnection cnct2 = new SQLiteConnection(LoadConnectionString()))
+                //{
+                //    foreach(Chat c in chats)
+                //    {
+                //        ChatMember = new ChatMember();
+                //        c.ChatMembers = await cnct.QueryAsync<ChatMember>("SELECT * FROM Chat", new DynamicParameters());
+                //    }
+                //}
+                return chats.ToList();
+            }
+        }
+        public async Task AddUser(User user)
+        {
+            using (IDbConnection cnct = new SQLiteConnection(LoadConnectionString()))
+            {
+                await cnct.ExecuteAsync("INSERT INTO User " +
                     "VALUES ( @Id, @Login, @Password, @LastTimeOnline," +
                     "@IsOnline, @Mail, @MobileNum, @AvatarPath)", user);
             }
         }
+        public async Task AddChatMember(ChatMember member)
+        {
+            using (IDbConnection cnct = new SQLiteConnection(LoadConnectionString()))
+            {
+                await cnct.ExecuteAsync("INSERT INTO ChatMember " +
+                    "VALUES (@Id,@Chat_FK,@User_FK)", new { member.Id, Chat_FK= member.Chat.Id, User_FK = member.User.Id });
+            }
+        }
+        public async Task AddChat(Chat chat)
+        {
+            using (IDbConnection cnct = new SQLiteConnection(LoadConnectionString()))
+            {
+                await cnct.ExecuteAsync("INSERT INTO Chat " +
+                    "VALUES (@Id,@Title,@IsPrivate,@ImagePath)", chat);
+            }
+        }
 
-        public string LoadConnectionString(string id = "MusgramCS")
+        public async Task<Chat> GetChatById(int id)
+        {
+            using (IDbConnection cnct = new SQLiteConnection(LoadConnectionString()))
+            {
+                var res = await cnct.QuerySingleAsync<Chat>("SELECT TOP(1) FROM Chat " +
+                    "WHERE Id = @Id", id);
+                return res;
+            }
+        }
+        public async Task<bool> IfChatExist(Chat chat)
+        {
+            if (await GetChatById(chat.Id) != null)
+            {
+                return true;
+            }
+            return false;
+        }
+        private string LoadConnectionString(string id = "MusgramCS")
         {
             return ConfigurationManager.ConnectionStrings[id].ConnectionString;
         }
